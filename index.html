@@ -36,17 +36,33 @@
   }
 }
 
-.error {
+#loading {
+}
+
+#error {
   color: #F00;
   font-weight: bold;
 }
 </style>
+<script type="text/javascript">
+var Downloader = {};
+Downloader.config = {
+  endpoint: "https://fcecb5bjij.execute-api.ap-northeast-1.amazonaws.com/test",
+  key: "",
+  content: "hoge",
+  paths: [
+      "test.zip",
+      "hoge/fuga/piyo.txt"
+      ],
+  dlfile: "test.zip"
+};
+</script>
 <script src="js/main.js"></script>
 <title>DYSTOPIA</title>
 </head>
 <body>
 <div id="content">
-<img src="img/jacket.png" width=100% /><br />
+<img src="img/jacket.png" alt="jacket image" width=100% /><br />
 
 <p>Ca5 / DYSTOPIA</p>
 <p>
@@ -60,6 +76,11 @@ DOWNLOADボタンを押してください。
 <input id="key_input" type="text" name="k" size="10" value="" />
 </p>
 <button id="download_button">DOWNLOAD</button>
+<div id="loading">
+    <img src="img/loading.gif" />
+</div>
+<p id="error">
+</p>
 </div>
 </body>
 </html>

@@ -40,19 +40,7 @@ var Query = (function () {
     return params;
 })();
 
-var Downloader = {};
-Downloader.config = {
-  endpoint: "https://fcecb5bjij.execute-api.ap-northeast-1.amazonaws.com/test",
-  key: "",
-  content: "hoge",
-  paths: [
-      "test.zip",
-      "hoge/fuga/piyo.txt"
-      ],
-  filename: "test.zip"
-} 
-
-Downloader.download = function(data){
+var download = function(data){
     var xmlHttpRequest = new XMLHttpRequest();
     var self = this;
     xmlHttpRequest.onreadystatechange = function()
@@ -63,31 +51,49 @@ Downloader.download = function(data){
         if( this.readyState == READYSTATE_COMPLETED
          && this.status == HTTP_STATUS_OK )
         {
-            content = JSON.parse(this.responseText)['urls'][Downloader.config.filename];
-            var a = document.createElement('a');
-            a.download = Downloader.config.filename;
-            a.href = 'data:application/octet-stream,'+encodeURIComponent(content);
-            a.click();
+            document.getElementById('loading').style.display="none";
+            var response = JSON.parse(this.responseText)
+            console.log(response)
+            if(response['status']){
+                var content = response['urls'][Downloader.config.dlfile];
+                var a = document.createElement('a');
+                a.download = Downloader.config.dlfile;
+                a.href = 'data:application/octet-stream,'+encodeURIComponent(content);
+                a.click();
+            }else{
+                var error = document.getElementById('error');
+                var textNode = document.createTextNode(response['msg']);
+                error.appendChild(textNode);
+            }
         }
     }
     xmlHttpRequest.open( 'POST', Downloader.config.endpoint );
-    // サーバに対して解析方法を指定する
     xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded;application/json' );
-    // データをリクエスト ボディに含めて送信する
     xmlHttpRequest.send(JSON.stringify(data));
 }
 
 
 window.addEventListener('load', function(){
+    var loading = document.getElementById('loading');
+    loading.style.display="none";
+    // set k=
     var keyInput = document.getElementById('key_input');
     if(Query.k != null){
-        keyInput.value = Query.k;
+        keyInput.value = Query.k
     }
     var downloadButton = document.getElementById('download_button');
     downloadButton.onclick = function(){
+        // remove previous error message
+        var error = document.getElementById('error');
+        for (var i = error.childNodes.length-1; i>=0; i--) {
+            error.removeChild(error.childNodes[i]);
+        }
+        // set download function
         var keyInput = document.getElementById('key_input');
         Downloader.config.key = keyInput.value;
-        Downloader.download(Downloader.config);
+        download(Downloader.config);
+        // loading gif
+        loading.style.display="";
     }
 }, false);
 
