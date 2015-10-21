@@ -50,11 +50,10 @@ Downloader.config = {
   endpoint: "https://fcecb5bjij.execute-api.ap-northeast-1.amazonaws.com/test",
   key: "",
   content: "hoge",
-  paths: [
-      "test.zip",
-      "hoge/fuga/piyo.txt"
-      ],
-  dlfile: "test.zip"
+  paths: {
+      "フルセット": "test.zip",
+      "mp3のみ": "hoge/fuga/piyo.txt"
+      }
 };
 </script>
 <script src="js/main.js"></script>
@@ -66,19 +65,17 @@ Downloader.config = {
 
 <p>Ca5 / DYSTOPIA</p>
 <p>
-この度はCa5 / DYSTOPIA を<br />
-お買い上げ頂きありがとうございます。<br />
-ダウンロードコードを入力し、<br />
-DOWNLOADボタンを押してください。
+DOWNLOAD CODEを入力し、<br />
+ボタンを押してください。
 </p>
 <p>
-ダウンロードコード<br />
-<input id="key_input" type="text" name="k" size="10" value="" />
+<input id="key_input" type="text" name="k" size="18" value="" />
+<button id="download_button">次へ</button>
 </p>
-<button id="download_button">DOWNLOAD</button>
 <div id="loading">
     <img src="img/loading.gif" />
 </div>
+<div id="links"></div>
 <p id="error">
 </p>
 </div>

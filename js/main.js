@@ -55,11 +55,18 @@ var download = function(data){
             var response = JSON.parse(this.responseText)
             console.log(response)
             if(response['status']){
-                var content = response['urls'][Downloader.config.dlfile];
-                var a = document.createElement('a');
-                a.download = Downloader.config.dlfile;
-                a.href = 'data:application/octet-stream,'+encodeURIComponent(content);
-                a.click();
+
+                console.log(response)
+                for(key in Downloader.config.paths){
+                    var content = response['urls'][key];
+                    var links = document.getElementById('links');
+                    var a = document.createElement('a');
+                    a.innerHTML = "Download(" + key + ")"
+                    a.download = Downloader.config.paths[key];
+                    a.href = content;
+                    links.appendChild(a);
+                    links.appendChild(document.createElement('br'));
+                }
             }else{
                 var error = document.getElementById('error');
                 var textNode = document.createTextNode(response['msg']);
@@ -88,6 +95,11 @@ window.addEventListener('load', function(){
         for (var i = error.childNodes.length-1; i>=0; i--) {
             error.removeChild(error.childNodes[i]);
         }
+        // remove previous download url
+        var links = document.getElementById('links');
+        for (var i = links.childNodes.length-1; i>=0; i--) {
+            links.removeChild(links.childNodes[i]);
+        }
         // set download function
         var keyInput = document.getElementById('key_input');
         Downloader.config.key = keyInput.value;
@@ -96,7 +108,3 @@ window.addEventListener('load', function(){
         loading.style.display="";
     }
 }, false);
-
-
-
-
